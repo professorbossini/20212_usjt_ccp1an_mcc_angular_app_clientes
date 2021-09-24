@@ -1,0 +1,19 @@
+<h2>Inserção de clientes</h2>
+<mat-form-field appearance="fill">
+    <mat-label>Digite seu nome</mat-label>
+    <input matInput type="text" [(ngModel)]="nome">
+    <button
+        *ngIf="nome"
+        matSuffix
+        mat-icon-button
+        (click)="nome=''"
+    >
+        <mat-icon>close</mat-icon>
+    </button>
+</mat-form-field>
+<hr>
+<input type="text" placeholder="Digite seu fone" [(ngModel)]="fone">
+<hr>
+<input type="text" placeholder="Digite seu e-mail" [(ngModel)]="email">
+<hr>
+<button (click)="onAdicionarCliente()">Inserir cliente</button>
