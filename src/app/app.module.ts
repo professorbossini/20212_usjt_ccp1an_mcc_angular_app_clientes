@@ -8,12 +8,19 @@ import { ClienteInserirComponent } from './clientes/cliente-inserir/cliente-inse
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input'
+import { MatInputModule } from '@angular/material/input';
+import { MatCardModule } from '@angular/material/card';
+import { CabecalhoComponent } from './cabecalho/cabecalho.component';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { ClienteListaComponent } from './clientes/cliente-lista/cliente-lista.component';
+import { MatExpansionModule } from "@angular/material/expansion";
 
 @NgModule({
   declarations: [
     AppComponent,
-    ClienteInserirComponent
+    ClienteInserirComponent,
+    CabecalhoComponent,
+    ClienteListaComponent
   ],
   imports: [
     BrowserAnimationsModule,
@@ -21,7 +28,10 @@ import { MatInputModule } from '@angular/material/input'
     FormsModule,
     MatButtonModule,
     MatIconModule,
-    MatInputModule
+    MatInputModule,
+    MatCardModule,
+    MatToolbarModule,
+    MatExpansionModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
