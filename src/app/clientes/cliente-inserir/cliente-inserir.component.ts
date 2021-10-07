@@ -11,13 +11,14 @@ export class ClienteInserirComponent {
   constructor (private clienteService: ClienteService){
 
   }
-  
+
   onAdicionarCliente(form: NgForm) {
     if (form.invalid) return;
-      this.clienteService.adicionarCliente(
-        form.value.nome,
-        form.value.fone,
-        form.value.email
+    this.clienteService.adicionarCliente(
+      form.value.nome,
+      form.value.fone,
+      form.value.email
     )
+    form.resetForm();
   }
 }
