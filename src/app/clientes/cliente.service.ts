@@ -29,7 +29,7 @@ export class ClienteService{
             //operador spread ...
             this.listaClientesAtualizada.next([...this.clientes]);
         })
-
+ 
     }
 
     getListaDeClientesAtualizadaObservable () {
