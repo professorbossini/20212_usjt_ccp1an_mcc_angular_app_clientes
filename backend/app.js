@@ -1,3 +1,4 @@
+require('dotenv').config()
 const express = require ('express')
 const cors = require ('cors')
 const app = express()
@@ -7,7 +8,7 @@ app.use(cors())
 const mongoose = require('mongoose');
 const Cliente = require('./models/cliente');
 
-mongoose.connect('mongodb+srv://user_base:outrasenha@cluster0.skf8n.mongodb.net/app-mean?retryWrites=true&w=majority')
+mongoose.connect(`mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGODB_PASSWORD}@cluster0.${process.env.MONGODB_ADDRESS}.mongodb.net/${process.env.MONGOBD_DATABSE}?retryWrites=true&w=majority`)
 .then(() => {
   console.log("conexão ok")
 }).catch(() => {
