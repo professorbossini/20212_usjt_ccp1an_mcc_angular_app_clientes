@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import { Cliente } from "./cliente.model";
 import { Subject } from "rxjs";
 import { HttpClient } from "@angular/common/http";
+import { map } from "rxjs/operators";
 
 @Injectable({providedIn: 'root'})
 export class ClienteService{
@@ -13,12 +14,22 @@ export class ClienteService{
     }
 
     getClientes(): void {
-        // return [...this.clientes]
-        this.httpClient.get<{mensagem: string, clientes: Cliente[]}>('http://localhost:3000/api/clientes')
-        .subscribe((dados) => {
-           this.clientes = dados.clientes 
+      this.httpClient.get<{mensagem: string, clientes: any}>('http://localhost:3000/api/clientes')
+        .pipe(map((dados) => {
+          return dados.clientes.map(cliente => {
+            return {
+              id: cliente._id,
+              nome: cliente.nome,
+              fone: cliente.fone,
+              email: cliente.email
+            }
+          })
+        }))
+        .subscribe((clientes) => {
+           this.clientes = clientes;
            this.listaClientesAtualizada.next([...this.clientes])
-        })
+        }
+      )
     }
 
     adicionarCliente (nome: string, fone: string, email: string) {
@@ -29,7 +40,7 @@ export class ClienteService{
             //operador spread ...
             this.listaClientesAtualizada.next([...this.clientes]);
         })
- 
+
     }
 
     getListaDeClientesAtualizadaObservable () {
