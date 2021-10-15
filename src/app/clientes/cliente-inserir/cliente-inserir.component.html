@@ -3,7 +3,7 @@
 
         <mat-form-field appearance="fill">
             <mat-label>Digite seu nome</mat-label>
-            <input matInput type="text" ngModel name="nome" required minlength="3">
+            <input matInput type="text" [ngModel]="cliente?.nome" name="nome" required minlength="3">
             <mat-error>
                 Digite um nome válido
             </mat-error>
@@ -11,17 +11,17 @@
     
         <mat-form-field appearance="fill">
             <mat-label>Digite seu fone</mat-label>
-            <input matInput type="text" ngModel name="fone" required>
+            <input matInput type="text" [ngModel]="cliente?.fone" name="fone" required>
             <mat-error>Digite um telefone válido</mat-error>
         </mat-form-field>
     
         <mat-form-field appearance="fill">
             <mat-label>Digite seu e-mail</mat-label>
-            <input matInput type="text" ngModel name="email" required email>
+            <input matInput type="text" [ngModel]="cliente?.email" name="email" required email>
             <mat-error>Digite um e-mail válido</mat-error>
         </mat-form-field>
     
-        <button mat-stroked-button color="primary">
+        <button mat-stroked-button color="accent">
             Inserir cliente
         </button>
     </form>

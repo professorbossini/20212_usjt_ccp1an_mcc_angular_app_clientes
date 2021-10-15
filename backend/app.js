@@ -7,8 +7,7 @@ app.use(cors())
 
 const mongoose = require('mongoose');
 const Cliente = require('./models/cliente');
-
-mongoose.connect(`mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGODB_PASSWORD}@cluster0.${process.env.MONGODB_ADDRESS}.mongodb.net/${process.env.MONGOBD_DATABSE}?retryWrites=true&w=majority`)
+mongoose.connect(`mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGODB_PASSWORD}@cluster0.${process.env.MONGODB_ADDRESS}.mongodb.net/${process.env.MONGODB_DATABASE}?retryWrites=true&w=majority`)
 .then(() => {
   console.log("conexão ok")
 }).catch(() => {
@@ -48,16 +47,23 @@ app.post('/api/clientes', (req, res) => {
       fone: req.body.fone,
       email: req.body.email
     })
-    cliente.save();
-    console.log(cliente);
-    res.status(201).json({
-        mensagem: "Cliente inserido"
+    cliente.save()
+    .then (clienteInserido => {
+      console.log(cliente);
+      res.status(201).json({
+          mensagem: "Cliente inserido",
+          id: clienteInserido._id
+      })
     })
 });
 
 app.delete('/api/clientes/:id', (req, res, next) => {
-  console.log(req.params);
-  res.status(200).end();
+  Cliente.deleteOne({_id: req.params.id})
+  .then(resultado => {
+    console.log(resultado)
+    res.status(200).json({mensagem: "Cliente removido"});
+  })
+  
 });
 
 module.exports = app
