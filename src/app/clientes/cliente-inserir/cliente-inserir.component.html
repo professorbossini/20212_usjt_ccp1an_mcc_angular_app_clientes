@@ -1,5 +1,5 @@
 <mat-card>
-    <form (submit)="onAdicionarCliente(clienteForm)" #clienteForm="ngForm">
+    <form (submit)="onSalvarCliente(clienteForm)" #clienteForm="ngForm">
 
         <mat-form-field appearance="fill">
             <mat-label>Digite seu nome</mat-label>
@@ -8,21 +8,21 @@
                 Digite um nome válido
             </mat-error>
         </mat-form-field>
-    
+
         <mat-form-field appearance="fill">
             <mat-label>Digite seu fone</mat-label>
             <input matInput type="text" [ngModel]="cliente?.fone" name="fone" required>
             <mat-error>Digite um telefone válido</mat-error>
         </mat-form-field>
-    
+
         <mat-form-field appearance="fill">
             <mat-label>Digite seu e-mail</mat-label>
             <input matInput type="text" [ngModel]="cliente?.email" name="email" required email>
             <mat-error>Digite um e-mail válido</mat-error>
         </mat-form-field>
-    
+
         <button mat-stroked-button color="accent">
-            Inserir cliente
+            Salvar Cliente
         </button>
     </form>
 </mat-card>
