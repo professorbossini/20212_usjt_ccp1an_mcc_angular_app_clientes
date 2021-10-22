@@ -3,13 +3,17 @@ import { Cliente } from "./cliente.model";
 import { Subject } from "rxjs";
 import { HttpClient } from "@angular/common/http";
 import { map } from "rxjs/operators";
+import { Router } from '@angular/router'
 
 @Injectable({providedIn: 'root'})
 export class ClienteService{
     private clientes: Cliente[] = [];
     private listaClientesAtualizada = new Subject<Cliente[]>();
 
-    constructor (private httpClient: HttpClient){
+    constructor (
+      private httpClient: HttpClient,
+      private router: Router
+    ){
 
     }
     getListaDeClientesAtualizadaObservable () {
@@ -31,6 +35,7 @@ export class ClienteService{
         .subscribe((clientes) => {
            this.clientes = clientes;
            this.listaClientesAtualizada.next([...this.clientes])
+           this.router.navigate(['/'])
         }
       )
     }
@@ -50,6 +55,7 @@ export class ClienteService{
             this.clientes.push(cliente);
             //operador spread ...
             this.listaClientesAtualizada.next([...this.clientes]);
+            this.router.navigate(['/'])
         })
 
     }
