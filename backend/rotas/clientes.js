@@ -57,7 +57,7 @@ router.delete('/:id', (req, res, next) => {
     Cliente.findById(req.params.id)
     .then((cli) => {
       if (cli) {
-        res(200).json(cli);
+        res.status(200).json(cli);
       }
       else
         res.status(404).json({mensagem: "Cliente não encontrado"})

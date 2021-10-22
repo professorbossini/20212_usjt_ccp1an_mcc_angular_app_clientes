@@ -37,7 +37,7 @@ export class ClienteInserirComponent implements OnInit{
       }),
       imagem: new FormControl(null, {
         validators: [Validators.required],
-        asyncValidators: [mimeTypeValidator]
+        asyncValidators:[mimeTypeValidator]
       })
     })
     this.route.paramMap.subscribe((paramMap: ParamMap) => {

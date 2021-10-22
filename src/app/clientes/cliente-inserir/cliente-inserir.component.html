@@ -16,7 +16,7 @@
         </div>
 
         <div class="imagem-preview">
-            <img [src]="previewImagem" [alt]="form.value.nome" *ngIf="previewImagem && previewImagem !== ''">
+            <img [src]="previewImagem" [alt]="form.value.nome" *ngIf="previewImagem && previewImagem !== '' && form.get('imagem').valid">
         </div>
 
         <mat-form-field appearance="fill">
