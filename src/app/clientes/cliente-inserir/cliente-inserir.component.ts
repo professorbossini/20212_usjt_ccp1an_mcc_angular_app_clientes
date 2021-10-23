@@ -52,7 +52,8 @@ export class ClienteInserirComponent implements OnInit{
             id: dadosCliente._id,
             nome: dadosCliente.nome,
             fone: dadosCliente.fone,
-            email: dadosCliente.email
+            email: dadosCliente.email,
+            imagemURL: null
           };
           this.form.setValue({
             nome: this.cliente.nome,
@@ -75,7 +76,8 @@ export class ClienteInserirComponent implements OnInit{
       this.clienteService.adicionarCliente(
         this.form.value.nome,
         this.form.value.fone,
-        this.form.value.email
+        this.form.value.email,
+        this.form.value.imagem
       );
     }
     else {

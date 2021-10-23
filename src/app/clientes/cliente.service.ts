@@ -28,7 +28,8 @@ export class ClienteService{
               id: cliente._id,
               nome: cliente.nome,
               fone: cliente.fone,
-              email: cliente.email
+              email: cliente.email,
+              imagemURL: cliente.imagemURL
             }
           })
         }))
@@ -47,37 +48,50 @@ export class ClienteService{
       (`http://localhost:3000/api/clientes/${idCliente}`);
     }
 
-    adicionarCliente (nome: string, fone: string, email: string) {
-        const cliente: Cliente = { nome, fone, email }
-        this.httpClient.post<{mensagem: string, id: string}>('http://localhost:3000/api/clientes', cliente)
-        .subscribe((dados) => {
-            cliente.id = dados.id
-            this.clientes.push(cliente);
-            //operador spread ...
-            this.listaClientesAtualizada.next([...this.clientes]);
-            this.router.navigate(['/'])
-        })
+  adicionarCliente (nome: string, fone: string, email: string, imagem: File) {
+    //const cliente: Cliente = { nome, fone, email }
 
-    }
+    const dadosCliente = new FormData();
+    dadosCliente.append("nome", nome);
+    dadosCliente.append("fone", fone);
+    dadosCliente.append("email", email);
+    dadosCliente.append("imagem", imagem);
 
-    removerCliente (id: string): void{
-      this.httpClient.delete(`http://localhost:3000/api/clientes/${id}`)
-      .subscribe(() => {
-          this.clientes = this.clientes.filter (cli => cli.id !== id)
-          this.listaClientesAtualizada.next([...this.clientes])
-      })
-    }
+    this.httpClient.post<{mensagem: string, cliente: Cliente}>
+    ('http://localhost:3000/api/clientes', dadosCliente)
+    .subscribe((dados) => {
+      const cliente: Cliente = {
+        id: dados.cliente.id,
+        nome: nome,
+        fone: fone,
+        email: email,
+        imagemURL: dados.cliente.imagemURL
+      };
+      this.clientes.push(cliente);
+      //operador spread ...
+      this.listaClientesAtualizada.next([...this.clientes]);
+      this.router.navigate(['/'])
+    })
+  }
 
-    atualizarCliente (id: string, nome: string, fone: string, email: string) {
-      const cliente: Cliente = {id, nome, fone, email};
-      this.httpClient.put(`http://localhost:3000/api/clientes/${id}`, cliente)
-      .subscribe(res => {
-        const copia = [...this.clientes];
-        const indice = copia.findIndex(cli => cli.id === cliente.id);
-        copia[indice] = cliente;
-        this.clientes = copia;
-        this.listaClientesAtualizada.next([...this.clientes]);
-      });
-    }
+  removerCliente (id: string): void{
+    this.httpClient.delete(`http://localhost:3000/api/clientes/${id}`)
+    .subscribe(() => {
+        this.clientes = this.clientes.filter (cli => cli.id !== id)
+        this.listaClientesAtualizada.next([...this.clientes])
+    })
+  }
+
+  atualizarCliente (id: string, nome: string, fone: string, email: string) {
+    const cliente: Cliente = {id, nome, fone, email, imagemURL: null};
+    this.httpClient.put(`http://localhost:3000/api/clientes/${id}`, cliente)
+    .subscribe(res => {
+      const copia = [...this.clientes];
+      const indice = copia.findIndex(cli => cli.id === cliente.id);
+      copia[indice] = cliente;
+      this.clientes = copia;
+      this.listaClientesAtualizada.next([...this.clientes]);
+    });
+  }
 
 }
