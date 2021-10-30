@@ -66,7 +66,9 @@ router.delete('/:id', (req, res, next) => {
 
   });
 
-  router.put("/:id", (req, res, next) => {
+  router.put("/:id", multer({ storage: armazenamento}).single('imagem'),
+  (req, res, next) => {
+    console.log(req.file);
     const cliente = new Cliente({
       _id: req.params.id,
       nome: req.body.nome,
@@ -77,7 +79,7 @@ router.delete('/:id', (req, res, next) => {
     .then((resultado) => {
       console.log(resultado);
     });
-    res.status(200).json({mensagem: 'Atualização realizadda com sucesso'})
+    res.status(200).json({mensagem: 'Atualização realizada com sucesso'})
   })
 
   router.get('/:id', (req, res, next) => {

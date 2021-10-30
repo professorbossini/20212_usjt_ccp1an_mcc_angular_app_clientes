@@ -82,16 +82,42 @@ export class ClienteService{
     })
   }
 
-  atualizarCliente (id: string, nome: string, fone: string, email: string) {
-    const cliente: Cliente = {id, nome, fone, email, imagemURL: null};
-    this.httpClient.put(`http://localhost:3000/api/clientes/${id}`, cliente)
+  atualizarCliente (id: string, nome: string, fone: string, email: string, imagem: File | string) {
+    //const cliente: Cliente = {id, nome, fone, email, imagemURL: null};
+    let clienteData: Cliente | FormData;
+    if (typeof(imagem) === 'object') { //é um arquivo, precisa criar um form data
+      clienteData = new FormData();
+      clienteData.append('id', id);
+      clienteData.append('nome', nome);
+      clienteData.append('fone', fone);
+      clienteData.append('email', email);
+      clienteData.append('imagem', imagem, nome); //nome = nome do arquivo
+    }
+    else { //é uma string, vamos montar o JSON comum
+      clienteData = {
+        id: id,
+        nome: nome,
+        fone: fone,
+        email: email,
+        imagemURL: imagem
+      }
+    }
+    console.log(typeof(clienteData));
+    this.httpClient.put(`http://localhost:3000/api/clientes/${id}`, clienteData)
     .subscribe(res => {
       const copia = [...this.clientes];
-      const indice = copia.findIndex(cli => cli.id === cliente.id);
+      const indice = copia.findIndex(cli => cli.id === id);
+      const cliente: Cliente = {
+        id: id,
+        nome: nome,
+        fone: fone,
+        email: email,
+        imagemURL: ""
+      }
       copia[indice] = cliente;
       this.clientes = copia;
       this.listaClientesAtualizada.next([...this.clientes]);
+      this.router.navigate(['/'])
     });
   }
-
 }
