@@ -8,7 +8,8 @@ import { Router } from '@angular/router'
 @Injectable({providedIn: 'root'})
 export class ClienteService{
     private clientes: Cliente[] = [];
-    private listaClientesAtualizada = new Subject<Cliente[]>();
+    private listaClientesAtualizada = 
+        new Subject<{clientes: Cliente[], maxClientes: number}>();
 
     constructor (
       private httpClient: HttpClient,
@@ -20,22 +21,29 @@ export class ClienteService{
       return this.listaClientesAtualizada.asObservable();
     }
 
-    getClientes(): void {
-      this.httpClient.get<{mensagem: string, clientes: any}>('http://localhost:3000/api/clientes')
+    getClientes(pagesize: number, page: number): void {
+      const parametros = `?pagesize=${pagesize}&page=${page}`
+      this.httpClient.get<{mensagem: string, clientes: any, maxClientes: number}>('http://localhost:3000/api/clientes' + parametros)
         .pipe(map((dados) => {
-          return dados.clientes.map(cliente => {
-            return {
-              id: cliente._id,
-              nome: cliente.nome,
-              fone: cliente.fone,
-              email: cliente.email,
-              imagemURL: cliente.imagemURL
-            }
-          })
+          return {
+            clientes: dados.clientes.map(cliente => {
+              return {
+                id: cliente._id,
+                nome: cliente.nome,
+                fone: cliente.fone,
+                email: cliente.email,
+                imagemURL: cliente.imagemURL
+              }
+            }),
+            maxClientes: dados.maxClientes
+          }
         }))
-        .subscribe((clientes) => {
-           this.clientes = clientes;
-           this.listaClientesAtualizada.next([...this.clientes])
+        .subscribe((dados) => {
+           this.clientes = dados.clientes;
+           this.listaClientesAtualizada.next({
+             clientes: [...this.clientes],
+             maxClientes: dados.maxClientes
+            })
            this.router.navigate(['/'])
         }
       )
@@ -44,7 +52,7 @@ export class ClienteService{
     getCliente (idCliente: string){
       //return {...this.clientes.find(cli => cli.id === idCliente)}
       return this.httpClient.get
-      <{_id: string, nome: string, fone: string, email: string}>
+      <{_id: string, nome: string, fone: string, email: string, imagemURL: string}>
       (`http://localhost:3000/api/clientes/${idCliente}`);
     }
 

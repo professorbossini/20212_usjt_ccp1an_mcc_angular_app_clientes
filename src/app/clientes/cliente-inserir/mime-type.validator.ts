@@ -1,7 +1,9 @@
 import { AbstractControl } from "@angular/forms";
-import { Observable, Observer } from "rxjs";
+import { Observable, Observer, of } from "rxjs";
 
 export const mimeTypeValidator = (control: AbstractControl): Promise <{[key: string]: any}> | Observable <{[key: string]: any}> => {
+    if (typeof(control.value) === 'string')
+        return of(null)
     const arquivo = control.value as File
     //png: 89504e47
     //jpg: ffd8ffe0 ou ffd8ffe1 ou ffd8ffe2 ou ffd8ffe3 ou ffd8ffe8

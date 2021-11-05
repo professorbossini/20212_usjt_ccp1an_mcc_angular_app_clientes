@@ -24,11 +24,27 @@ const armazenamento = multer.diskStorage({
 
 //GET localhost:3000/api/clientes
 router.get('', (req, res) => {
-    Cliente.find().then(documents => {
-      console.log(documents);
+    const pageSize = +req.query.pagesize
+    const page = +req.query.page
+    let clientesEncontrados
+    const consulta = Cliente.find()
+    if (pageSize && page){
+      consulta
+        .skip(pageSize * (page - 1))
+        .limit(pageSize)
+
+    }
+
+    consulta
+    .then (documents => {
+      clientesEncontrados = documents
+      return Cliente.count()
+    })
+    .then(count => {
       res.status(200).json({
         mensagem: "Tudo OK",
-        clientes: documents
+        clientes: clientesEncontrados,
+        maxClientes: count
       });
     });
 });
@@ -69,11 +85,17 @@ router.delete('/:id', (req, res, next) => {
   router.put("/:id", multer({ storage: armazenamento}).single('imagem'),
   (req, res, next) => {
     console.log(req.file);
+    let imagemURL = req.body.imagemURL
+    if (req.file){
+      const url = req.protocol + '://' + req.get('host')
+      imagemURL = url + '/imagens/' + req.file.filename
+    }
     const cliente = new Cliente({
       _id: req.params.id,
       nome: req.body.nome,
       fone: req.body.fone,
-      email: req.body.email
+      email: req.body.email,
+      imagemURL: imagemURL
     })
     Cliente.updateOne({_id: req.params.id}, cliente)
     .then((resultado) => {
