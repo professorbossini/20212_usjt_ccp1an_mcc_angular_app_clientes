@@ -9,6 +9,8 @@ import { UsuarioService } from '../usuario.service';
 })
 export class SignupComponent implements OnInit {
 
+  public estaCarregando: boolean = false;
+
   onSignup(form: NgForm) {
     if (form.invalid) return;
     this.usuarioService.criarUsuario(form.value.email, form.value.password);

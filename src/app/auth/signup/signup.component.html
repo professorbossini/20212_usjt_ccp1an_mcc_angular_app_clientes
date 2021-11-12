@@ -1,1 +1,42 @@
-<p> um dia vai funcionar </p>
+<mat-card>
+    <mat-spinner *ngIf="estaCarregando"></mat-spinner>
+    <form
+        (submit)="onSignup(signupForm)"
+        #signupForm="ngForm"
+        *ngIf="!estaCarregando"
+    >
+
+    <mat-form-field>
+        <input
+            matInput
+            name="email"
+            ngModel
+            type="email"
+            placeholder="Email"
+            required email
+        >
+        <mat-error>Digite um e-mail válido</mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+        <input
+            matInput
+            name="password"
+            ngModel
+            type="password"
+            placeholder="Senha"
+            required
+        >
+        <mat-error>Digite uma senha válida</mat-error>
+    </mat-form-field>
+
+    <button
+        mat-raised-button
+        color="accent"
+        type="submit"
+    >
+        Cadastrar
+    </button>
+
+    </form>
+</mat-card>
