@@ -1,7 +1,8 @@
-const express = require ('express')
-const multer = require('multer')
-const router = express.Router()
-const Cliente = require('../models/cliente')
+const express = require ('express');
+const multer = require('multer');
+const router = express.Router();
+const Cliente = require('../models/cliente');
+const checkAuth = require('../middleware/check-auth');
 
 const MIME_TYPE_EXTENSAO_MAPA = {
   'image/png': 'png',
@@ -34,7 +35,6 @@ router.get('', (req, res) => {
         .limit(pageSize)
 
     }
-
     consulta
     .then (documents => {
       clientesEncontrados = documents
@@ -49,8 +49,8 @@ router.get('', (req, res) => {
     });
 });
 
-  //POST localhost:3000/api/clientes
-router.post('', multer({storage: armazenamento}).single('imagem'), (req, res) => {
+//POST localhost:3000/api/clientes
+router.post('', checkAuth, multer({storage: armazenamento}).single('imagem'), (req, res) => {
   const imagemURL = `${req.protocol}://${req.get('host')}`
   const cliente = new Cliente({
     nome: req.body.nome,
@@ -73,16 +73,15 @@ router.post('', multer({storage: armazenamento}).single('imagem'), (req, res) =>
   })
 });
 
-router.delete('/:id', (req, res, next) => {
+router.delete('/:id', checkAuth, (req, res, next) => {
     Cliente.deleteOne({_id: req.params.id})
     .then(resultado => {
       console.log(resultado)
       res.status(200).json({mensagem: "Cliente removido"});
     })
-
   });
 
-  router.put("/:id", multer({ storage: armazenamento}).single('imagem'),
+  router.put("/:id", checkAuth, multer({ storage: armazenamento}).single('imagem'),
   (req, res, next) => {
     console.log(req.file);
     let imagemURL = req.body.imagemURL
